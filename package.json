@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev:server": "tsx watch server/index.ts",
+    "dev:docker": "docker compose -f dev/docker-compose.yaml up --build",
+    "dev:minio": "docker compose -f dev/docker-compose.yaml up minio minio-init -d",
+    "dev:server": "tsx watch --env-file dev/.env server/index.ts",
     "dev:client": "vite --config client/vite.config.ts",
     "build:client": "vite build --config client/vite.config.ts",
     "build:server": "tsc -p tsconfig.json",

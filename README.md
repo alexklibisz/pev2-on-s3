@@ -71,14 +71,37 @@ On startup the server writes and reads back a test object to verify S3 connectiv
 
 ## Local development
 
+The easiest way to develop is with Docker — no local Node.js installation required.
+
+### Fully containerized (recommended)
+
 ```bash
-npm install
+npm run dev:docker
+# or directly:
+docker compose -f dev/docker-compose.yaml up
+```
 
-# Start the API server (watches for changes)
-npm run dev:server
+This starts three services:
 
-# In another terminal, start the Vite dev server
-npm run dev:client
+| Service | URL | Description |
+|---|---|---|
+| **dev-client** | [http://localhost:5173](http://localhost:5173) | Vite dev server with HMR |
+| **dev-server** | [http://localhost:3000](http://localhost:3000) | Express API (tsx watch) |
+| **MinIO console** | [http://localhost:9001](http://localhost:9001) | S3 storage UI (minioadmin / minioadmin) |
+
+Your source files are bind-mounted into the containers, so edits trigger hot-reload automatically. Dependencies are installed inside a Docker volume and won't pollute your host.
+
+### Running locally with Node.js
+
+If you prefer running Node.js on your machine, start MinIO in Docker and run the servers directly:
+
+```bash
+# Start MinIO
+npm run dev:minio
+
+# Create a dev/.env with your S3 settings, then:
+npm run dev:server   # watches for changes
+npm run dev:client   # Vite dev server (in another terminal)
 ```
 
 The Vite dev server proxies `/api` requests to the Express server on port 3000.
