@@ -3,11 +3,15 @@
     <nav class="navbar navbar-expand-sm bg-body-tertiary border-bottom mb-3">
       <div class="container d-flex justify-content-between align-items-center">
         <router-link class="navbar-brand" to="/">{{ siteTitle }}</router-link>
-        <div class="d-flex gap-2">
+        <div class="d-flex gap-2 align-items-center">
           <router-link to="/" class="btn btn-sm btn-outline-secondary">Home</router-link>
           <button class="btn btn-sm btn-outline-secondary" @click="toggleTheme">
             {{ theme === "dark" ? "Light" : "Dark" }}
           </button>
+          <template v-if="showShare">
+            <button class="btn btn-sm btn-outline-primary" @click="copyCurrentUrl">Share</button>
+            <span v-if="copied" class="ms-2 text-success small">Copied!</span>
+          </template>
         </div>
       </div>
     </nav>
@@ -16,9 +20,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 
 const siteTitle = ref("pev2");
+
+const route = useRoute();
+const copied = ref(false);
+const showShare = computed(() => route.path.startsWith("/plan/"));
+
+async function copyCurrentUrl() {
+  const url = window.location.href;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      fallbackCopyTextToClipboard(url);
+    }
+    copied.value = true;
+    setTimeout(() => (copied.value = false), 2000);
+  } catch {
+    // ignore errors here
+  }
+}
+
+function fallbackCopyTextToClipboard(text: string) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand("copy");
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}
 
 onMounted(async () => {
   try {
