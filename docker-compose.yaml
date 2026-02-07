@@ -2,6 +2,9 @@ services:
   minio:
     image: minio/minio
     command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - minio-data:/data
     environment:
@@ -32,7 +35,7 @@ services:
     environment:
       PEV2_ON_S3_BUCKET_ENDPOINT: http://minio:9000
       PEV2_ON_S3_BUCKET_REGION: auto
-      PEV2_ON_S3_BUCKET: pev2-plans
+      PEV2_ON_S3_BUCKET_PATH_PREFIX: dev
       PEV2_ON_S3_BUCKET_ACCESS_KEY_ID: minioadmin
       PEV2_ON_S3_BUCKET_SECRET_ACCESS_KEY: minioadmin
       PEV2_ON_S3_SERVER_PORT: "3000"
