@@ -109,7 +109,3 @@ The Vite dev server proxies `/api` requests to the Express server on port 3000.
 ## Health check
 
 `GET /api/health` returns `{"status":"ok"}` and can be used for container health checks or load balancer probes.
-
-## License
-
-MIT
