@@ -3,6 +3,7 @@ dist
 client/dist
 .env
 .env.*
+!dev/.env
 *.log
 *.tsbuildinfo
 .DS_Store
