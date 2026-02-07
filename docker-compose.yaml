@@ -8,8 +8,8 @@ services:
     volumes:
       - minio-data:/data
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: MINIO_ACCESS_KEY_ID
+      MINIO_ROOT_PASSWORD: MINIO_SECRET_ACCESS_KEY
     healthcheck:
       test: ["CMD", "mc", "ready", "local"]
       interval: 5s
@@ -23,7 +23,7 @@ services:
         condition: service_healthy
     entrypoint: >
       /bin/sh -c "
-      mc alias set local http://minio:9000 minioadmin minioadmin &&
+      mc alias set local http://minio:9000 MINIO_ACCESS_KEY_ID MINIO_SECRET_ACCESS_KEY &&
       mc mb --ignore-existing local/pev2-plans &&
       echo 'Bucket created'
       "
@@ -35,10 +35,10 @@ services:
     environment:
       PEV2_ON_S3_BUCKET_ENDPOINT: http://minio:9000
       PEV2_ON_S3_BUCKET_REGION: auto
-      PEV2_ON_S3_BUCKET_BUCKET: pev2-plans
-      PEV2_ON_S3_BUCKET_BUCKET_PATH_PREFIX: dev
-      PEV2_ON_S3_BUCKET_ACCESS_KEY_ID: minioadmin
-      PEV2_ON_S3_BUCKET_SECRET_ACCESS_KEY: minioadmin
+      PEV2_ON_S3_BUCKET: pev2-plans
+      PEV2_ON_S3_BUCKET_PATH_PREFIX: example
+      PEV2_ON_S3_BUCKET_ACCESS_KEY_ID: MINIO_ACCESS_KEY_ID
+      PEV2_ON_S3_BUCKET_SECRET_ACCESS_KEY: MINIO_SECRET_ACCESS_KEY
       PEV2_ON_S3_SERVER_PORT: "3000"
       PEV2_ON_S3_FRONTEND_SITE_TITLE: pev2.mysite.com
     depends_on:
