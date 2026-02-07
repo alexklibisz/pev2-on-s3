@@ -7,7 +7,9 @@
     </div>
     <div v-else-if="error" class="alert alert-danger mt-3 container">{{ error }}</div>
     <template v-else-if="planData">
-      <h5 v-if="planData.title" class="mb-2 px-3">{{ planData.title }}</h5>
+      <div class="mb-2 px-3">
+        <h5 v-if="planData.title" class="mb-0">{{ planData.title }}</h5>
+      </div>
       <div class="flex-grow-1 overflow-auto d-flex px-3">
         <Plan :plan-source="planData.plan" :plan-query="planData.query" />
       </div>
@@ -32,6 +34,7 @@ const route = useRoute();
 const planData = ref<PlanData | null>(null);
 const loading = ref(true);
 const error = ref("");
+
 
 onMounted(async () => {
   try {
