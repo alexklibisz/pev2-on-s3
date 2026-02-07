@@ -1,0 +1,16 @@
+name: PR
+
+on:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start services
+        run: docker compose up --wait
+
+      - name: Test health endpoint
+        run: curl -f http://localhost:3000/api/health
