@@ -70,4 +70,4 @@ jobs:
         if: steps.release.outputs.is_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create $TAG --generate-notes
+        run: gh release create "v${{ steps.versions.outputs.combined_version }}" --generate-notes
