@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex flex-column h-100">
+    <div v-if="customBanner" v-html="customBanner" class="custom-banner"></div>
     <nav class="navbar navbar-expand-sm bg-body-tertiary border-bottom mb-3">
       <div class="container d-flex justify-content-between align-items-center">
         <router-link class="navbar-brand" to="/">{{ siteTitle }}</router-link>
@@ -24,6 +25,7 @@ import { ref, watch, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 
 const siteTitle = ref("pev2");
+const customBanner = ref("");
 
 const route = useRoute();
 const copied = ref(false);
@@ -64,6 +66,7 @@ onMounted(async () => {
     if (res.ok) {
       const config = await res.json();
       siteTitle.value = config.siteTitle;
+      customBanner.value = config.customBanner || "";
       document.title = `${config.siteTitle} — PostgreSQL EXPLAIN Visualizer`;
     }
   } catch {

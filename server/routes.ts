@@ -12,6 +12,7 @@ router.get("/api/health", (_req, res) => {
 router.get("/api/config", (_req, res) => {
   res.json({
     siteTitle: config.frontend.siteTitle,
+    customBanner: config.frontend.customBanner,
   });
 });
 

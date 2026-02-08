@@ -15,6 +15,7 @@ Paste a query plan, get a shareable link.
 - **Dark mode** — toggle between light and dark themes
 - **S3 startup check** — the server verifies S3 connectivity on boot and fails fast if misconfigured
 - **Configurable site title** — customize the navbar and browser tab title via environment variable
+- **Custom banner** — display a custom HTML banner at the top of the page via environment variable
 
 ## Quick start
 
@@ -52,6 +53,7 @@ All configuration is done via environment variables.
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `PEV2_ON_S3_FRONTEND_SITE_TITLE` | No | `pev2` | Site title shown in the navbar and browser tab |
+| `PEV2_ON_S3_CUSTOM_BANNER` | No | | Custom HTML banner displayed at the top of the page |
 
 ## Deploying with Docker
 
