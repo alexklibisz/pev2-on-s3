@@ -2,7 +2,7 @@
 
 A self-hosted server for Postgres Explain Visualizer 2 ([pev2](https://github.com/dalibo/pev2)) that stores plans on S3-compatible object storage.
 
-Paste a query plan, get a shareable link.
+Demo: <https://pev2-on-s3-demo.klibisz.com>
 
 ## Functionality
 
