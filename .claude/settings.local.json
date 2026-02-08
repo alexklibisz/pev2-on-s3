@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npx tsc:*)",
       "Bash(docker compose up:*)",
-      "Bash(docker compose:*)"
+      "Bash(docker compose:*)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }
