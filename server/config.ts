@@ -19,6 +19,6 @@ export const config = {
     customBanner: process.env.PEV2_ON_S3_CUSTOM_BANNER || "",
   },
   examples: {
-    enabled: !!process.env.PEV2_ON_S3_SHOW_EXAMPLES,
+    enabled: process.env.PEV2_ON_S3_SHOW_EXAMPLES === "true",
   },
 };

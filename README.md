@@ -54,6 +54,7 @@ All configuration is done via environment variables.
 |---|---|---|---|
 | `PEV2_ON_S3_FRONTEND_SITE_TITLE` | No | `pev2` | Site title shown in the navbar and browser tab |
 | `PEV2_ON_S3_CUSTOM_BANNER` | No | | Custom HTML banner displayed at the top of the page |
+| `PEV2_ON_S3_SHOW_EXAMPLES` | No | `false` | Set to `true` to enable the Examples page, which lists example plans from `server/examples/` |
 
 ## Deploying with Docker
 
