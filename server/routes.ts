@@ -1,5 +1,7 @@
 import { Router } from "express";
 import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import { putObject, getObject, deleteObject } from "./s3.js";
 import { config } from "./config.js";
 
@@ -9,11 +11,61 @@ router.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
+const EXAMPLES_DIR = path.resolve("examples/plans");
+
 router.get("/api/config", (_req, res) => {
   res.json({
     siteTitle: config.frontend.siteTitle,
     customBanner: config.frontend.customBanner,
+    showExamples: config.examples.enabled,
   });
+});
+
+router.get("/api/examples", (_req, res) => {
+  if (!config.examples.enabled) {
+    res.json([]);
+    return;
+  }
+  try {
+    if (!fs.existsSync(EXAMPLES_DIR)) {
+      res.json([]);
+      return;
+    }
+    const files = fs.readdirSync(EXAMPLES_DIR).filter((f) => f.endsWith(".json")).sort();
+    const examples = files.map((f) => {
+      const raw = fs.readFileSync(path.join(EXAMPLES_DIR, f), "utf-8");
+      const doc = JSON.parse(raw);
+      return { name: f.replace(/\.json$/, ""), title: doc.title };
+    });
+    res.json(examples);
+  } catch (err) {
+    console.error("GET /api/examples error:", err);
+    res.json([]);
+  }
+});
+
+router.get("/api/examples/:name", (req, res) => {
+  if (!config.examples.enabled) {
+    res.status(404).json({ error: "Examples are not enabled" });
+    return;
+  }
+  const name = req.params.name;
+  if (!/^[\w-]+$/.test(name)) {
+    res.status(400).json({ error: "Invalid example name" });
+    return;
+  }
+  const filePath = path.join(EXAMPLES_DIR, `${name}.json`);
+  try {
+    if (!fs.existsSync(filePath)) {
+      res.status(404).json({ error: "Example not found" });
+      return;
+    }
+    const raw = fs.readFileSync(filePath, "utf-8");
+    res.json(JSON.parse(raw));
+  } catch (err) {
+    console.error("GET /api/examples/:name error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 router.post("/api/plans", async (req, res) => {

@@ -38,7 +38,10 @@ const error = ref("");
 
 onMounted(async () => {
   try {
-    const res = await fetch(`/api/plans/${route.params.id}`);
+    const url = route.meta.isExample
+      ? `/api/examples/${route.params.name}`
+      : `/api/plans/${route.params.id}`;
+    const res = await fetch(url);
     if (!res.ok) {
       throw new Error(res.status === 404 ? "Plan not found" : "Failed to load plan");
     }

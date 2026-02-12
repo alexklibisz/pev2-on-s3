@@ -7,6 +7,7 @@ const router = createRouter({
   routes: [
     { path: "/", component: Home },
     { path: "/plan/:id", component: PlanView },
+    { path: "/example/:name", component: PlanView, meta: { isExample: true } },
   ],
 });
 

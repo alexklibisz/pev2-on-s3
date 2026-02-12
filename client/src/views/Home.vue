@@ -69,6 +69,18 @@
             </button>
           </li>
         </ul>
+        <div v-if="examples.length > 0" class="mt-4">
+          <h5 class="mb-3">Example Plans</h5>
+          <ul class="list-group">
+            <li
+              v-for="ex in examples"
+              :key="ex.name"
+              class="list-group-item"
+            >
+              <router-link :to="`/example/${ex.name}`">{{ ex.title }}</router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -77,6 +89,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+
+interface ExamplePlan {
+  name: string;
+  title: string;
+}
 
 interface RecentPlan {
   id: string;
@@ -92,6 +109,7 @@ const query = ref("");
 const submitting = ref(false);
 const error = ref("");
 const recentPlans = ref<RecentPlan[]>([]);
+const examples = ref<ExamplePlan[]>([]);
 
 const STORAGE_KEY = "pev2-recent-plans";
 
@@ -166,5 +184,19 @@ function clearHistory() {
   saveRecent();
 }
 
-onMounted(loadRecent);
+async function loadExamples() {
+  try {
+    const res = await fetch("/api/examples");
+    if (res.ok) {
+      examples.value = await res.json();
+    }
+  } catch {
+    // ignore — examples just won't show
+  }
+}
+
+onMounted(() => {
+  loadRecent();
+  loadExamples();
+});
 </script>
