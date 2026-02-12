@@ -34,43 +34,64 @@
         </form>
       </div>
       <div class="col-md-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="mb-0">Recent Plans</h5>
-          <button
-            v-if="recentPlans.length > 0"
-            class="btn btn-sm btn-outline-danger"
-            @click="clearHistory"
-          >
-            Clear all
-          </button>
-        </div>
-        <div v-if="recentPlans.length === 0" class="text-body-secondary">
-          No plans yet.
-        </div>
-        <ul class="list-group">
-          <li
-            v-for="rp in recentPlans"
-            :key="rp.id"
-            class="list-group-item d-flex justify-content-between align-items-start"
-          >
-            <div class="me-auto text-truncate">
-              <router-link :to="`/plan/${rp.id}`">
-                {{ rp.title || rp.id.slice(0, 8) }}
-              </router-link>
-              <br />
-              <small class="text-body-secondary">{{ formatDate(rp.createdAt) }}</small>
-            </div>
+        <ul class="nav nav-tabs mb-3">
+          <li class="nav-item">
             <button
-              class="btn btn-sm btn-outline-danger ms-2 flex-shrink-0"
-              title="Remove"
-              @click="removePlan(rp)"
+              class="nav-link"
+              :class="{ active: activeTab === 'recent' }"
+              @click="activeTab = 'recent'"
             >
-              &times;
+              Recent Plans
+            </button>
+          </li>
+          <li v-if="examples.length > 0" class="nav-item">
+            <button
+              class="nav-link"
+              :class="{ active: activeTab === 'examples' }"
+              @click="activeTab = 'examples'"
+            >
+              Example Plans
             </button>
           </li>
         </ul>
-        <div v-if="examples.length > 0" class="mt-4">
-          <h5 class="mb-3">Example Plans</h5>
+
+        <div v-show="activeTab === 'recent'">
+          <div v-if="recentPlans.length > 0" class="d-flex justify-content-end mb-2">
+            <button
+              class="btn btn-sm btn-outline-danger"
+              @click="clearHistory"
+            >
+              Clear all
+            </button>
+          </div>
+          <div v-if="recentPlans.length === 0" class="text-body-secondary">
+            No plans yet.
+          </div>
+          <ul class="list-group">
+            <li
+              v-for="rp in recentPlans"
+              :key="rp.id"
+              class="list-group-item d-flex justify-content-between align-items-start"
+            >
+              <div class="me-auto text-truncate">
+                <router-link :to="`/plan/${rp.id}`">
+                  {{ rp.title || rp.id.slice(0, 8) }}
+                </router-link>
+                <br />
+                <small class="text-body-secondary">{{ formatDate(rp.createdAt) }}</small>
+              </div>
+              <button
+                class="btn btn-sm btn-outline-danger ms-2 flex-shrink-0"
+                title="Remove"
+                @click="removePlan(rp)"
+              >
+                &times;
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div v-show="activeTab === 'examples'">
           <ul class="list-group">
             <li
               v-for="ex in examples"
@@ -116,6 +137,7 @@ const submitting = ref(false);
 const error = ref("");
 const recentPlans = ref<RecentPlan[]>([]);
 const examples = ref<ExamplePlan[]>([]);
+const activeTab = ref<"recent" | "examples">("recent");
 
 const STORAGE_KEY = "pev2-recent-plans";
 
