@@ -10,6 +10,7 @@ const router = createRouter({
     { path: "/examples", component: ExamplesView },
     { path: "/plan/:id", component: PlanView },
     { path: "/example/:name", component: PlanView, meta: { isExample: true } },
+    { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
 });
 

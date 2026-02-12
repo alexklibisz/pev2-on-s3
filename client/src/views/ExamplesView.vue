@@ -37,23 +37,28 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 interface ExamplePlan {
   name: string;
   title: string;
 }
 
+const router = useRouter();
 const examples = ref<ExamplePlan[]>([]);
 const loading = ref(true);
 
 onMounted(async () => {
   try {
     const res = await fetch("/api/examples");
-    if (res.ok) {
-      examples.value = await res.json();
+    if (!res.ok) {
+      router.replace("/");
+      return;
     }
+    examples.value = await res.json();
   } catch {
-    // ignore
+    router.replace("/");
+    return;
   } finally {
     loading.value = false;
   }

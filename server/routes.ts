@@ -23,7 +23,7 @@ router.get("/api/config", (_req, res) => {
 
 router.get("/api/examples", (_req, res) => {
   if (!config.examples.enabled) {
-    res.json([]);
+    res.status(403).json({ error: "Examples are not enabled" });
     return;
   }
   try {

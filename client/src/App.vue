@@ -6,7 +6,7 @@
         <router-link class="navbar-brand" to="/">{{ siteTitle }}</router-link>
         <div class="d-flex gap-2 align-items-center">
           <router-link to="/" class="btn btn-sm btn-outline-secondary">Home</router-link>
-          <router-link to="/examples" class="btn btn-sm btn-outline-secondary">Examples</router-link>
+          <router-link v-if="showExamples" to="/examples" class="btn btn-sm btn-outline-secondary">Examples</router-link>
           <button class="btn btn-sm btn-outline-secondary" @click="toggleTheme">
             {{ theme === "dark" ? "Light" : "Dark" }}
           </button>
@@ -29,6 +29,7 @@ import { useRoute } from "vue-router";
 
 const siteTitle = ref("pev2");
 const customBanner = ref("");
+const showExamples = ref(false);
 
 const route = useRoute();
 const copied = ref(false);
@@ -70,6 +71,7 @@ onMounted(async () => {
       const config = await res.json();
       siteTitle.value = config.siteTitle;
       customBanner.value = config.customBanner || "";
+      showExamples.value = !!config.showExamples;
       document.title = `${config.siteTitle} — PostgreSQL EXPLAIN Visualizer`;
     }
   } catch {

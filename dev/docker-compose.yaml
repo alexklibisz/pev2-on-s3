@@ -46,7 +46,7 @@ services:
       PEV2_ON_S3_BUCKET_SECRET_ACCESS_KEY: ${PEV2_ON_S3_BUCKET_SECRET_ACCESS_KEY:-minioadmin}
       PEV2_ON_S3_SERVER_PORT: "3000"
       PEV2_ON_S3_FRONTEND_SITE_TITLE: ${PEV2_ON_S3_FRONTEND_SITE_TITLE:-pev2 (dev)}
-      PEV2_ON_S3_SHOW_EXAMPLES: "true"
+      PEV2_ON_S3_SHOW_EXAMPLES: "false"
       PEV2_ON_S3_CUSTOM_BANNER: >-
         <div style="background-color: #fff3cd; color: #664d03; padding: 0.75rem 1rem; border-bottom: 1px solid #ffecb5; text-align: center;">
           <strong>⚠️ Local Development Build</strong>
