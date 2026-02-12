@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pb-4">
     <div class="row">
       <div class="col-md-8">
         <h4 class="mb-3">New Plan</h4>
@@ -27,10 +27,12 @@
               placeholder="SELECT ..."
             ></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" :disabled="submitting">
-            {{ submitting ? "Submitting..." : "Submit" }}
-          </button>
-          <span v-if="error" class="text-danger ms-3">{{ error }}</span>
+          <div class="d-flex align-items-center gap-3">
+            <button type="submit" class="btn btn-primary" :disabled="submitting">
+              {{ submitting ? "Submitting..." : "Submit" }}
+            </button>
+            <span v-if="error" class="text-danger">{{ error }}</span>
+          </div>
         </form>
       </div>
       <div class="col-md-4">
@@ -76,7 +78,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 interface RecentPlan {
   id: string;
@@ -85,6 +87,7 @@ interface RecentPlan {
   deleteKey: string;
 }
 
+const route = useRoute();
 const router = useRouter();
 const title = ref("");
 const plan = ref("");
@@ -166,5 +169,21 @@ function clearHistory() {
   saveRecent();
 }
 
-onMounted(loadRecent);
+onMounted(async () => {
+  loadRecent();
+  const exampleName = route.query.example as string | undefined;
+  if (exampleName) {
+    try {
+      const res = await fetch(`/api/examples/${exampleName}`);
+      if (res.ok) {
+        const data = await res.json();
+        title.value = data.title;
+        plan.value = data.plan;
+        query.value = data.query;
+      }
+    } catch {
+      // ignore
+    }
+  }
+});
 </script>

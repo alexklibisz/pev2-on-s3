@@ -18,4 +18,7 @@ export const config = {
     siteTitle: process.env.PEV2_ON_S3_FRONTEND_SITE_TITLE || "pev2",
     customBanner: process.env.PEV2_ON_S3_CUSTOM_BANNER || "",
   },
+  examples: {
+    enabled: process.env.PEV2_ON_S3_SHOW_EXAMPLES === "true",
+  },
 };

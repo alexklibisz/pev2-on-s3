@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: pev2_examples
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
