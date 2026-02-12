@@ -16,7 +16,9 @@
         </div>
       </div>
     </nav>
-    <router-view class="flex-grow-1 overflow-auto" />
+    <div class="flex-grow-1 overflow-auto" style="min-height: 0">
+      <router-view />
+    </div>
   </div>
 </template>
 

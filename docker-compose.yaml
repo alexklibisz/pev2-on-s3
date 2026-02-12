@@ -41,7 +41,7 @@ services:
       PEV2_ON_S3_BUCKET_SECRET_ACCESS_KEY: MINIO_SECRET_ACCESS_KEY
       PEV2_ON_S3_SERVER_PORT: "3000"
       PEV2_ON_S3_FRONTEND_SITE_TITLE: pev2.mysite.com
-      PEV2_ON_S3_SHOW_EXAMPLES: "true"
+      PEV2_ON_S3_SHOW_EXAMPLES: "false"
     depends_on:
       minio-init:
         condition: service_completed_successfully

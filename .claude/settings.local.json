@@ -9,7 +9,8 @@
       "Bash(PGPORT=5433 PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres PGDATABASE=pev2_examples bash:*)",
       "Bash(docker stop:*)",
       "Bash(docker rm:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(grep:*)"
     ]
   }
 }
