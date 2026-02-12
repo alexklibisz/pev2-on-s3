@@ -75,9 +75,15 @@
             <li
               v-for="ex in examples"
               :key="ex.name"
-              class="list-group-item"
+              class="list-group-item d-flex justify-content-between align-items-center"
             >
               <router-link :to="`/example/${ex.name}`">{{ ex.title }}</router-link>
+              <button
+                class="btn btn-sm btn-outline-secondary ms-2 flex-shrink-0"
+                @click="loadExample(ex.name)"
+              >
+                Load
+              </button>
             </li>
           </ul>
         </div>
@@ -182,6 +188,20 @@ async function removePlan(rp: RecentPlan) {
 function clearHistory() {
   recentPlans.value = [];
   saveRecent();
+}
+
+async function loadExample(name: string) {
+  try {
+    const res = await fetch(`/api/examples/${name}`);
+    if (res.ok) {
+      const data = await res.json();
+      title.value = data.title;
+      plan.value = data.plan;
+      query.value = data.query;
+    }
+  } catch {
+    // ignore
+  }
 }
 
 async function loadExamples() {
