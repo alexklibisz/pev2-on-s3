@@ -10,11 +10,25 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Plan <span class="text-danger">*</span></label>
+            <div class="mb-2 small text-body-secondary">
+              Prefix your query with
+              <code class="user-select-all">EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)</code>
+              <button
+                type="button"
+                class="btn btn-sm btn-link p-0 align-baseline"
+                title="Copy to clipboard"
+                @click="copyExplainPrefix"
+              >
+                <span v-if="explainCopied" class="text-success">&#10003;</span>
+                <span v-else>&#128203;</span>
+              </button>
+              , run it, and paste the output below.
+            </div>
             <textarea
               v-model="plan"
               class="form-control font-monospace"
               rows="10"
-              placeholder="Paste EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) output here"
+              placeholder="Paste the output here"
               required
             ></textarea>
           </div>
@@ -95,6 +109,7 @@ const query = ref("");
 const submitting = ref(false);
 const error = ref("");
 const recentPlans = ref<RecentPlan[]>([]);
+const explainCopied = ref(false);
 
 const STORAGE_KEY = "pev2-recent-plans";
 
@@ -167,6 +182,16 @@ async function removePlan(rp: RecentPlan) {
 function clearHistory() {
   recentPlans.value = [];
   saveRecent();
+}
+
+async function copyExplainPrefix() {
+  try {
+    await navigator.clipboard.writeText("EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ");
+    explainCopied.value = true;
+    setTimeout(() => (explainCopied.value = false), 2000);
+  } catch {
+    // ignore
+  }
 }
 
 onMounted(async () => {
