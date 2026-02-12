@@ -32,16 +32,6 @@
               {{ submitting ? "Submitting..." : "Submit" }}
             </button>
             <span v-if="error" class="text-danger">{{ error }}</span>
-            <select
-              v-if="examples.length > 0"
-              class="form-select w-auto"
-              @change="loadExample(($event.target as HTMLSelectElement).value)"
-            >
-              <option value="" selected>Load an example...</option>
-              <option v-for="ex in examples" :key="ex.name" :value="ex.name">
-                {{ ex.title }}
-              </option>
-            </select>
           </div>
         </form>
       </div>
@@ -88,12 +78,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-
-interface ExamplePlan {
-  name: string;
-  title: string;
-}
+import { useRoute, useRouter } from "vue-router";
 
 interface RecentPlan {
   id: string;
@@ -102,6 +87,7 @@ interface RecentPlan {
   deleteKey: string;
 }
 
+const route = useRoute();
 const router = useRouter();
 const title = ref("");
 const plan = ref("");
@@ -109,7 +95,6 @@ const query = ref("");
 const submitting = ref(false);
 const error = ref("");
 const recentPlans = ref<RecentPlan[]>([]);
-const examples = ref<ExamplePlan[]>([]);
 
 const STORAGE_KEY = "pev2-recent-plans";
 
@@ -184,33 +169,21 @@ function clearHistory() {
   saveRecent();
 }
 
-async function loadExample(name: string) {
-  try {
-    const res = await fetch(`/api/examples/${name}`);
-    if (res.ok) {
-      const data = await res.json();
-      title.value = data.title;
-      plan.value = data.plan;
-      query.value = data.query;
-    }
-  } catch {
-    // ignore
-  }
-}
-
-async function loadExamples() {
-  try {
-    const res = await fetch("/api/examples");
-    if (res.ok) {
-      examples.value = await res.json();
-    }
-  } catch {
-    // ignore — examples just won't show
-  }
-}
-
-onMounted(() => {
+onMounted(async () => {
   loadRecent();
-  loadExamples();
+  const exampleName = route.query.example as string | undefined;
+  if (exampleName) {
+    try {
+      const res = await fetch(`/api/examples/${exampleName}`);
+      if (res.ok) {
+        const data = await res.json();
+        title.value = data.title;
+        plan.value = data.plan;
+        query.value = data.query;
+      }
+    } catch {
+      // ignore
+    }
+  }
 });
 </script>

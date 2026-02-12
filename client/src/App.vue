@@ -6,6 +6,7 @@
         <router-link class="navbar-brand" to="/">{{ siteTitle }}</router-link>
         <div class="d-flex gap-2 align-items-center">
           <router-link to="/" class="btn btn-sm btn-outline-secondary">Home</router-link>
+          <router-link to="/examples" class="btn btn-sm btn-outline-secondary">Examples</router-link>
           <button class="btn btn-sm btn-outline-secondary" @click="toggleTheme">
             {{ theme === "dark" ? "Light" : "Dark" }}
           </button>
